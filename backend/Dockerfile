@@ -2,11 +2,11 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+# Copy the Prisma schema before install so the postinstall
+# `prisma generate` hook can find it.
 COPY package*.json ./
-RUN npm install --omit=dev
-
 COPY prisma ./prisma
-RUN npx prisma generate
+RUN npm install --omit=dev
 
 COPY . .
 
