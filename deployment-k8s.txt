@@ -1,0 +1,48 @@
+⏺ Kubernetes deployment
+
+  The manifests reference local image names (per-portfolio-backend:latest, per-portfolio-frontend:latest)
+  with no registry prefix — so they're set up for a local cluster (Docker Desktop, minikube, or kind).
+  Steps:
+
+  # 1. Build the images locally
+  docker build -t per-portfolio-backend:latest ./backend
+  docker build -t per-portfolio-frontend:latest ./frontend
+
+  # 2. (minikube only) load images into the cluster
+  minikube image load per-portfolio-backend:latest
+  minikube image load per-portfolio-frontend:latest
+
+  # 3. Apply everything (namespace + postgres + backend + frontend)
+  kubectl apply -k k8s/
+
+  # 4. Watch it come up
+  kubectl get pods -n portfolio -w
+
+  To deploy to a real/remote cluster (GKE, EKS, etc.), you'd need to push those images to a registry (GHCR,
+  Docker Hub) and update the image: fields in k8s/backend.yaml and k8s/frontend.yaml to the fully-qualified
+  names.
+
+  ---
+  ⚠️  Two things to fix before you rely on CI
+
+  Your .github/workflows/docker-image.yml is broken — it runs:
+  docker build . --file Dockerfile
+  but there's no Dockerfile at the repo root (only backend/Dockerfile and frontend/Dockerfile). This job
+  will fail on every push. It also doesn't tag/push anywhere useful (my-image-name:$(timestamp)), so it's
+  not actually building your app.
+
+  ---
+  Which path do you want to actually deploy to? That determines the real next steps:
+
+  ┌────────────────────────────────┬───────────────────────────────────────────┬─────────┐
+  │         If you want...         │                    Use                    │ Effort  │
+  ├────────────────────────────────┼───────────────────────────────────────────┼─────────┤
+  │ Quick demo on a VPS/server     │ Docker Compose                            │ Lowest  │
+  ├────────────────────────────────┼───────────────────────────────────────────┼─────────┤
+  │ Public URL, managed hosting    │ Vercel (+ Neon Postgres + S3 for uploads) │ Low     │
+  ├────────────────────────────────┼───────────────────────────────────────────┼─────────┤
+  │ Production-grade orchestration │ Kubernetes on a cloud cluster             │ Highest │
+  └────────────────────────────────┴───────────────────────────────────────────┴─────────┘
+
+  Tell me your target (a VPS you own? Vercel? a cloud K8s cluster?) and I'll give you the exact commands —
+  and fix that broken CI workflow so it builds and pushes both images properly.
