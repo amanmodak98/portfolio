@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: kubectl get pods -n portfolio -w
+      run: kubectl apply -k k8s/
