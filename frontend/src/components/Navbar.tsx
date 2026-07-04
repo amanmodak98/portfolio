@@ -60,7 +60,6 @@ export default function Navbar() {
           </ul>
 
           <div className="hidden items-center gap-3 md:flex">
-            <ThemeToggle />
             <button onClick={() => navigate("/contact")} className="btn-primary">
               Let's talk
             </button>
