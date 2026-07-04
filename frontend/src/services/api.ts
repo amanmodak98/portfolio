@@ -28,7 +28,7 @@ api.interceptors.response.use(
 export const uploadsUrl = (path?: string | null) => {
   if (!path) return "";
   if (path.startsWith("http")) return path;
-  const base = import.meta.env.VITE_UPLOADS_URL || "http://localhost:4000";
+  const base = import.meta.env.VITE_UPLOADS_URL ?? "http://localhost:4000";
   return `${base}${path}`;
 };
 

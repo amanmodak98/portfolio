@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import ThemeToggle from "./ThemeToggle";
 
 const links = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
   { to: "/projects", label: "Work" },
+  { to: "/certifications", label: "Certifications" },
   { to: "/blog", label: "Blog" },
 ];
 
@@ -31,11 +31,11 @@ export default function Navbar() {
     >
       <div
         className={`transition-all duration-300 ${
-          scrolled ? "nav-blur border-b border-hair" : ""
+          scrolled ? "border-b border-white/[0.07] bg-[#08090c]/80 backdrop-blur-xl" : ""
         }`}
       >
         <nav className="container-page flex h-16 items-center justify-between">
-          <Link to="/" className="text-[15px] font-semibold tracking-tight text-ink">
+          <Link to="/" className="text-[15px] font-semibold tracking-tight text-white">
             {`{`}
             <span className="text-brand-400">dev</span>
             {`}`}
@@ -49,7 +49,7 @@ export default function Navbar() {
                   end={l.to === "/"}
                   className={({ isActive }) =>
                     `rounded-full px-3.5 py-1.5 text-sm transition ${
-                      isActive ? "text-ink" : "text-muted hover:text-ink"
+                      isActive ? "text-white" : "text-slate-400 hover:text-white"
                     }`
                   }
                 >
@@ -65,18 +65,15 @@ export default function Navbar() {
             </button>
           </div>
 
-          <div className="flex items-center gap-2 md:hidden">
-            <ThemeToggle />
-            <button
-              className="flex flex-col gap-1.5"
-              onClick={() => setOpen((v) => !v)}
-              aria-label="Toggle menu"
-            >
-              <span className={`h-0.5 w-6 bg-current text-ink transition ${open ? "translate-y-2 rotate-45" : ""}`} />
-              <span className={`h-0.5 w-6 bg-current text-ink transition ${open ? "opacity-0" : ""}`} />
-              <span className={`h-0.5 w-6 bg-current text-ink transition ${open ? "-translate-y-2 -rotate-45" : ""}`} />
-            </button>
-          </div>
+          <button
+            className="flex flex-col gap-1.5 md:hidden"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Toggle menu"
+          >
+            <span className={`h-0.5 w-6 bg-slate-200 transition ${open ? "translate-y-2 rotate-45" : ""}`} />
+            <span className={`h-0.5 w-6 bg-slate-200 transition ${open ? "opacity-0" : ""}`} />
+            <span className={`h-0.5 w-6 bg-slate-200 transition ${open ? "-translate-y-2 -rotate-45" : ""}`} />
+          </button>
         </nav>
       </div>
 
@@ -84,7 +81,7 @@ export default function Navbar() {
         <motion.ul
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: "auto", opacity: 1 }}
-          className="nav-blur space-y-1 overflow-hidden border-b border-hair px-5 py-3 md:hidden"
+          className="space-y-1 overflow-hidden border-b border-white/[0.07] bg-[#08090c]/95 px-5 py-3 backdrop-blur-xl md:hidden"
         >
           {[...links, { to: "/contact", label: "Contact" }].map((l) => (
             <li key={l.to}>
@@ -94,7 +91,7 @@ export default function Navbar() {
                 onClick={() => setOpen(false)}
                 className={({ isActive }) =>
                   `block rounded-lg px-3 py-2.5 text-sm ${
-                    isActive ? "bg-surface-2 text-ink" : "text-fg"
+                    isActive ? "bg-white/5 text-white" : "text-slate-300"
                   }`
                 }
               >
