@@ -1,0 +1,140 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum BlogStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("users")
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  techStack   String[] @map("tech_stack")
+  githubUrl   String?  @map("github_url")
+  liveUrl     String?  @map("live_url")
+  thumbnail   String?
+  featured    Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("projects")
+}
+
+model Skill {
+  id         Int    @id @default(autoincrement())
+  name       String
+  category   String
+  percentage Int    @default(0)
+
+  @@map("skills")
+}
+
+model Experience {
+  id          Int       @id @default(autoincrement())
+  company     String
+  position    String
+  description String
+  startDate   DateTime  @map("start_date")
+  endDate     DateTime? @map("end_date")
+
+  @@map("experience")
+}
+
+model Education {
+  id          Int    @id @default(autoincrement())
+  institution String
+  degree      String
+  cgpa        String?
+  startYear   Int    @map("start_year")
+  endYear     Int?   @map("end_year")
+
+  @@map("education")
+}
+
+model Blog {
+  id         Int        @id @default(autoincrement())
+  title      String
+  slug       String     @unique
+  content    String
+  coverImage String?    @map("cover_image")
+  tags       String[]
+  category   String?
+  status     BlogStatus @default(DRAFT)
+  createdAt  DateTime   @default(now()) @map("created_at")
+
+  @@map("blogs")
+}
+
+model Certificate {
+  id        Int      @id @default(autoincrement())
+  title     String
+  issuer    String
+  issueDate DateTime @map("issue_date")
+  imageUrl  String?  @map("image_url")
+  verifyUrl String?  @map("verify_url")
+
+  @@map("certificates")
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  subject   String
+  message   String
+  replied   Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("messages")
+}
+
+model SiteSettings {
+  id          Int      @id @default(1)
+  fullName    String   @default("Your Name")
+  role        String   @default("Full-Stack Developer")
+  tagline     String   @default("I build things for the web.")
+  bio         String   @default("")
+  location    String?
+  email       String   @default("you@example.com")
+  githubUrl   String?  @map("github_url")
+  linkedinUrl String?  @map("linkedin_url")
+  twitterUrl  String?  @map("twitter_url")
+  resumeUrl   String?  @map("resume_url")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("site_settings")
+}
+
+model VisitorAnalytics {
+  id        Int      @id @default(autoincrement())
+  visitorId String   @map("visitor_id")
+  page      String
+  device    String?
+  browser   String?
+  country   String?
+  visitTime DateTime @default(now()) @map("visit_time")
+
+  @@map("visitor_analytics")
+}
